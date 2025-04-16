@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://lwyok3ufb8p2"]
+
+[ext_resource type="PackedScene" uid="uid://eljnryyyrem5" path="res://items/item.tscn" id="1_anjaf"]
+[ext_resource type="PackedScene" uid="uid://uimn3u1536g6" path="res://effects/flame.tscn" id="2_3gjtk"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3gjtk"]
+top_radius = 0.1
+bottom_radius = 0.05
+height = 1.0
+radial_segments = 4
+rings = 0
+
+[node name="Torch" instance=ExtResource("1_anjaf")]
+
+[node name="Skin" parent="." index="1"]
+mesh = SubResource("CylinderMesh_3gjtk")
+
+[node name="Flame" parent="." index="2" instance=ExtResource("2_3gjtk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
