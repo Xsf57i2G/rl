@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0wirliopp4s4"]
+[gd_scene load_steps=7 format=3 uid="uid://b0wirliopp4s4"]
 
 [ext_resource type="Script" uid="uid://mim1b7e5tj1r" path="res://worlds/dungeon/dungeon.gd" id="1_vxec4"]
 
@@ -13,10 +13,19 @@ sky = SubResource("Sky_unbmw")
 ambient_light_source = 3
 reflected_light_source = 2
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_vxec4"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vxec4"]
+
 [node name="Dungeon" type="Node3D"]
 script = ExtResource("1_vxec4")
 
 [node name="Environment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_unmbr")
 
-[node name="Skin" type="MeshInstance3D" parent="."]
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_vxec4")
+
+[node name="Skin" type="MeshInstance3D" parent="Navigation"]
+mesh = SubResource("PlaneMesh_vxec4")
+skeleton = NodePath("../..")

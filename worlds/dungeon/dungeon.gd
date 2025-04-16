@@ -1,4 +1,3 @@
-@tool
 class_name Dungeon extends Node3D
 
 var bsp = BSP.new()
@@ -14,7 +13,7 @@ func generate(s = 0):
 	bsp.build(bounds, d)
 	for leaf in bsp.leaves():
 		room(leaf)
-	$Skin.mesh = chunk.build()
+	$Navigation/Skin.mesh = chunk.build()
 
 func room(leaf):
 	var gap = 2
