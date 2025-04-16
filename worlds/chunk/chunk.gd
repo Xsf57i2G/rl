@@ -1,7 +1,7 @@
-class_name Chunk extends Node
+class_name Chunk
 
 var st = SurfaceTool.new()
-var size = 16
+var size = 8
 var blocks = []
 var hp = 1
 
@@ -10,9 +10,19 @@ func hurt(at, n = 1):
 	if hp <= 0:
 		blocks.erase(at)
 
-func dig(at):
-	if blocks.has(at):
-		blocks.hurt(at)
+func dig(box):
+	var a = box.position.floor()
+	var b = (box.position + box.size).ceil()
+	for x in range(int(a.x), int(b.x)):
+		if x < 0 or x >= size:
+			continue
+		for y in range(int(a.y), int(b.y)):
+			if y < 0 or y >= size:
+				continue
+			for z in range(int(a.z), int(b.z)):
+				if z < 0 or z >= size:
+					continue
+				blocks.erase(Vector3(x, y, z))
 
 func place(at):
 	if valid(at):
@@ -29,11 +39,10 @@ func valid(at):
 	return (at.x >= 0 and at.y >= 0 and at.z >= 0 and at.x < size and at.y < size and at.z < size)
 
 func face(at, d):
-	var p = at * 0.5
 	st.set_normal(d)
 	var verts = directions(d)
 	for i in [0, 1, 2, 0, 2, 3]:
-		st.add_vertex(p + verts[i])
+		st.add_vertex(Vector3(at.x, at.y, at.z) + verts[i])
 
 func directions(d):
 	match d:
@@ -53,7 +62,7 @@ func directions(d):
 func block(at):
 	for d in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
 		var n = at + d
-		if not valid(n) or (valid(n) and not blocks.has(n)):
+		if not valid(n) or not blocks.has(n):
 			face(at, d)
 
 func build():
