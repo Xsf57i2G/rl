@@ -1,12 +1,22 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0wirliopp4s4"]
+[gd_scene load_steps=5 format=3 uid="uid://b0wirliopp4s4"]
 
 [ext_resource type="Script" uid="uid://mim1b7e5tj1r" path="res://worlds/dungeon/dungeon.gd" id="1_vxec4"]
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_vxec4"]
-noise_type = 4
-frequency = 0.1
-fractal_type = 0
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vxec4"]
+
+[sub_resource type="Sky" id="Sky_unbmw"]
+sky_material = SubResource("ProceduralSkyMaterial_vxec4")
+
+[sub_resource type="Environment" id="Environment_unmbr"]
+background_mode = 2
+sky = SubResource("Sky_unbmw")
+ambient_light_source = 3
+reflected_light_source = 2
 
 [node name="Dungeon" type="Node3D"]
 script = ExtResource("1_vxec4")
-noise = SubResource("FastNoiseLite_vxec4")
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_unmbr")
+
+[node name="Skin" type="MeshInstance3D" parent="."]
