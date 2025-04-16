@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhsrmm4akehyf"]
+[gd_scene load_steps=3 format=3 uid="uid://bhsrmm4akehyf"]
 
 [ext_resource type="PackedScene" uid="uid://b856c0svhfmms" path="res://characters/character.tscn" id="1_t47h7"]
+[ext_resource type="Script" uid="uid://0ycgyvpd466h" path="res://characters/monster.gd" id="2_bjm3i"]
 
 [node name="Monster" instance=ExtResource("1_t47h7")]
+script = ExtResource("2_bjm3i")
 
 [node name="Navigation" type="NavigationAgent3D" parent="." index="2"]

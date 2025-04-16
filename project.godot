@@ -13,6 +13,9 @@ config_version=5
 config/name="rl"
 run/main_scene="uid://cxrrk0hlp01db"
 config/features=PackedStringArray("4.5", "Forward Plus")
+boot_splash/show_image=false
+boot_splash/fullsize=false
+boot_splash/use_filter=false
 config/icon="res://icon.svg"
 
 [editor]
@@ -24,3 +27,7 @@ version_control/autoload_on_startup=true
 
 3d_render/layer_1="Worlds"
 3d_render/layer_2="Characters"
+
+[rendering]
+
+shading/overrides/force_vertex_shading=true
