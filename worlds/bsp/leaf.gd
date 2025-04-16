@@ -9,10 +9,10 @@ func _init(b):
 
 func split():
 	var axis = randi() % 3
-	var min_size = 4
-	if bounds.size[axis] < min_size * 2:
+	var m = 4
+	if bounds.size[axis] < m * 2:
 		return false
-	var cut = randf_range(min_size, bounds.size[axis] - min_size)
+	var cut = randf_range(m, bounds.size[axis] - m)
 	left = Leaf.new(AABB(bounds.position, bounds.size))
 	right = Leaf.new(AABB(bounds.position, bounds.size))
 	left.bounds.size[axis] = cut

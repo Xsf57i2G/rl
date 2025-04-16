@@ -1,16 +1,27 @@
 class_name Chunk
 
+enum Kind {STONE, BRICK}
+
 var st = SurfaceTool.new()
-var size = 8
-var blocks = []
-var hp = 1
+var size = 32
+var blocks = {}
+var traits = {
+	Kind.STONE: {
+		hp = 1,
+	},
+	Kind.BRICK: {
+		hp = 2,
+	}
+}
 
 func hurt(at, n = 1):
-	hp -= n
-	if hp <= 0:
-		blocks.erase(at)
+	if blocks.has(at):
+		var b = blocks[at]
+		b.hp -= n
+		if b.hp <= 0:
+			blocks.erase(at)
 
-func dig(box):
+func dig(box, kind = Kind.BRICK):
 	var a = box.position.floor()
 	var b = (box.position + box.size).ceil()
 	for x in range(int(a.x), int(b.x)):
@@ -24,16 +35,19 @@ func dig(box):
 					continue
 				blocks.erase(Vector3(x, y, z))
 
-func place(at):
+func place(at, kind = Kind.STONE):
 	if valid(at):
-		blocks.append(at)
+		blocks[at] = {
+			kind = kind,
+			hp = traits[kind].hp
+		}
 
 func fill():
 	for x in size:
 		for y in size:
 			for z in size:
 				var at = Vector3(x, y, z)
-				blocks.append(at)
+				place(at, STONE)
 
 func valid(at):
 	return (at.x >= 0 and at.y >= 0 and at.z >= 0 and at.x < size and at.y < size and at.z < size)
@@ -68,7 +82,7 @@ func block(at):
 func build():
 	st.clear()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for b in blocks:
+	for b in blocks.keys():
 		block(b)
 	st.index()
 	return st.commit()

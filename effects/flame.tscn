@@ -1,8 +1,8 @@
 [gd_scene load_steps=15 format=3 uid="uid://uimn3u1536g6"]
 
 [sub_resource type="Gradient" id="Gradient_jdkbm"]
-offsets = PackedFloat32Array(0, 0.5, 1)
-colors = PackedColorArray(0, 0, 0, 1, 2.50196, 1, 0, 1, 5, 0.502, 0, 1)
+offsets = PackedFloat32Array(0, 0.5)
+colors = PackedColorArray(0, 0, 0, 0, 2.50196, 1, 0, 1)
 metadata/_snap_enabled = true
 metadata/_snap_count = 4
 
@@ -28,14 +28,14 @@ input_name = "normal"
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_dd77j"]
 noise_type = 4
-frequency = 0.008
+frequency = 0.0015
 fractal_type = 0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_x3qgx"]
 width = 16
 height = 64
 seamless = true
-seamless_blend_skirt = 1.0
+seamless_blend_skirt = 0.5
 noise = SubResource("FastNoiseLite_dd77j")
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_3qqex"]
@@ -102,7 +102,7 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-672.803, -11.1543)
+graph_offset = Vector2(-107.496, 71.5947)
 nodes/vertex/0/position = Vector2(400, 280)
 nodes/vertex/2/node = SubResource("VisualShaderNodeVectorOp_l3esk")
 nodes/vertex/2/position = Vector2(120, 240)
@@ -117,7 +117,7 @@ nodes/vertex/6/position = Vector2(-460, 260)
 nodes/vertex/7/node = SubResource("VisualShaderNodeVectorOp_ekakb")
 nodes/vertex/7/position = Vector2(-460, 540)
 nodes/vertex/connections = PackedInt32Array(5, 0, 2, 0, 3, 0, 6, 2, 6, 0, 5, 0, 2, 0, 0, 0, 4, 0, 7, 0, 7, 0, 2, 1)
-nodes/fragment/0/position = Vector2(120, 300)
+nodes/fragment/0/position = Vector2(180, 280)
 nodes/fragment/2/node = SubResource("VisualShaderNodeTexture_4qwkq")
 nodes/fragment/2/position = Vector2(-180, 300)
 nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 2, 0, 0, 1, 2, 0, 0, 5)
@@ -136,4 +136,4 @@ cast_shadow = 0
 mesh = SubResource("SphereMesh_puagg")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-light_color = Color(1, 0.501961, 0, 1)
+light_color = Color(1, 0.816667, 0, 1)

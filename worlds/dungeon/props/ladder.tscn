@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgylrkb1bd4io"]
+
+[ext_resource type="PackedScene" uid="uid://bby1y1fasrj7p" path="res://worlds/dungeon/props/prop.tscn" id="1_bunj6"]
+[ext_resource type="PackedScene" uid="uid://bvy8ce4s1hbwo" path="res://blends/Ladder.blend" id="2_o1n8u"]
+
+[node name="Ladder" instance=ExtResource("1_bunj6")]
+
+[node name="Ladder" parent="." index="1" instance=ExtResource("2_o1n8u")]

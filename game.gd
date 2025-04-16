@@ -6,4 +6,4 @@ func _ready():
 	start()
 
 func start():
-	$Dungeon.generate()
+	$Dungeon.generate(randi())
