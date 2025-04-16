@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhsrmm4akehyf"]
+
+[ext_resource type="PackedScene" uid="uid://b856c0svhfmms" path="res://characters/character.tscn" id="1_t47h7"]
+
+[node name="Monster" instance=ExtResource("1_t47h7")]
+
+[node name="Navigation" type="NavigationAgent3D" parent="." index="2"]
