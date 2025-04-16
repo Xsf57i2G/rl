@@ -2,13 +2,13 @@ class_name Ruin extends Node3D
 
 var noise = FastNoiseLite.new()
 
-func dig(c):
-	noise.frequency = 0.1
-	noise.noise_type = noise.TYPE_VALUE_CUBIC
-	noise.fractal_type = noise.FRACTAL_NONE
-	for x in c.size:
-		for y in c.size:
-			for z in c.size:
+func dig(c, s = 0):
+	noise.seed = s
+	for x in c.w:
+		for y in c.w:
+			for z in c.w:
 				var at = Vector3(x, y, z)
-				if noise.get_noise_3dv(at) > 0.1:
-					c.dig(Vector3(position) + at)
+				var n = noise.get_noise_3dv(at)
+				if n > .1:
+					var damage = 1 + int(n * 2)
+					c.hurt(at, damage)
