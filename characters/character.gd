@@ -3,7 +3,7 @@ class_name Character extends CharacterBody3D
 var dead = false
 var hp = 1
 var jumps = 2
-var speed = 5
+var speed = 10
 var acceleration = 25
 
 func hurt(n):
@@ -23,5 +23,5 @@ func jump():
 
 func fall():
 	var g = get_gravity()
-	var dt = get_physics_process_delta_time()
+	var dt = get_process_delta_time()
 	velocity.y += g.y * dt

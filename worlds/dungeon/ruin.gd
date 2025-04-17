@@ -7,8 +7,11 @@ func dig(c, s = 0):
 	for x in c.w:
 		for y in c.w:
 			for z in c.w:
-				var at = Vector3(x, y, z)
-				var n = noise.get_noise_3dv(at)
-				if n > .1:
-					var damage = 1 + int(n * 2)
-					c.hurt(at, damage)
+				var spot = Vector3(x, y, z)
+				var n = noise.get_noise_3dv(spot)
+				if n > .1 and c.world.has(spot):
+					var d = 1 + n * 2
+					var type = c.world[spot].type
+					if type == Chunk.Type.BRICK:
+						d = min(d, 1)
+					c.hurt(spot, d)

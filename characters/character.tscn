@@ -10,15 +10,25 @@ radial_segments = 4
 rings = 0
 
 [node name="Character" type="CharacterBody3D"]
+slide_on_ceiling = false
+floor_stop_on_slope = false
+floor_block_on_wall = false
 script = ExtResource("1_qqr4u")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_54qew")
 
 [node name="Skin" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 layers = 2
 cast_shadow = 0
 mesh = SubResource("CapsuleMesh_54qew")
 
 [node name="Shadow" parent="." instance=ExtResource("1_yf0e5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 cull_mask = 1048573
+
+[node name="Skeleton" type="Skeleton3D" parent="."]
+
+[node name="Hand" type="BoneAttachment3D" parent="Skeleton"]

@@ -3,7 +3,5 @@ extends Node
 var over = false
 
 func _ready():
-	start()
-
-func start():
-	$Dungeon.generate(randi())
+	$Dungeon.generate()
+	$Dungeon.spawn(preload("uid://bhsrmm4akehyf"))

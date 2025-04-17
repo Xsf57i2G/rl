@@ -2,9 +2,7 @@ class_name BSP
 
 var root
 
-func build(b, d, s = 0):
-	if s != 0:
-		seed(s)
+func build(b, d):
 	root = Leaf.new(b)
 	split(root, d)
 
