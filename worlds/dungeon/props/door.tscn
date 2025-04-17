@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://yu6ltwikrgus"]
+
+[ext_resource type="PackedScene" uid="uid://bby1y1fasrj7p" path="res://worlds/dungeon/props/prop.tscn" id="1_d34js"]
+[ext_resource type="Script" uid="uid://dngfflefulnkp" path="res://worlds/dungeon/props/door.gd" id="2_0stn0"]
+[ext_resource type="PackedScene" uid="uid://h2gh7vtw33km" path="res://models/Door.glb" id="2_f6t7x"]
+
+[node name="Door" instance=ExtResource("1_d34js")]
+script = ExtResource("2_0stn0")
+
+[node name="Door" parent="." index="0" instance=ExtResource("2_f6t7x")]

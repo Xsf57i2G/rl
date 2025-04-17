@@ -2,20 +2,18 @@ class_name Chunk
 
 var st = SurfaceTool.new()
 var w = 16
-var world = []
+var blocks = []
 
 func _init():
 	for x in w:
 		for y in w:
 			for z in w:
-				world.append(Vector3(x,y,z))
+				blocks.append(Vector3(x,y,z))
 
 func hurt(spot, n = 1):
 	if spot.x == 0 or spot.x == w-1 or spot.y == 0 or spot.y == w-1 or spot.z == 0 or spot.z == w-1:
 		return
-	var i = world.find(spot)
-	if i >= 0:
-		world.remove_at(i)
+	blocks.erase(spot)
 
 func dig(area, t = null):
 	var a = area.position.floor()
@@ -27,24 +25,24 @@ func dig(area, t = null):
 		for y in range(int(a.y), int(b.y)):
 			for z in range(int(a.z), int(b.z)):
 				var spot = Vector3(x, y, z)
-				if world.has(spot):
+				if blocks.has(spot):
 					erases.append(spot)
 					if t != null:
 						for way in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
 							var next = spot + way
-							if inside(next) and world.has(next) and not area_int.has_point(next):
+							if inside(next) and blocks.has(next) and not area_int.has_point(next):
 								walls.append(next)
 	for spot in erases:
-		var i = world.find(spot)
+		var i = blocks.find(spot)
 		if i >= 0:
-			world.remove_at(i)
+			blocks.remove_at(i)
 	for spot in walls:
-		if not spot in erases and not world.has(spot):
-			world.append(spot)
+		if not spot in erases and not blocks.has(spot):
+			blocks.append(spot)
 
 func place(spot, block_type = "STONE"):
-	if inside(spot) and not world.has(spot):
-		world.append(spot)
+	if inside(spot) and not blocks.has(spot):
+		blocks.append(spot)
 
 func inside(spot):
 	return (spot.x >= 0 and spot.y >= 0 and spot.z >= 0 and spot.x < w and spot.y < w and spot.z < w)
@@ -74,12 +72,12 @@ func map(way):
 func cube(s):
 	for d in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
 		var n = s + d
-		if not world.has(n):
+		if not blocks.has(n):
 			side(s, d)
 
 func form():
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for spot in world:
+	for spot in blocks:
 		cube(spot)
 	st.index()
 	return st.commit()

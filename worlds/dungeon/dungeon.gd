@@ -6,7 +6,7 @@ var ruin = Ruin.new()
 
 func generate(s = 0):
 	var bounds = AABB(Vector3.ZERO, Vector3(chunk.w, chunk.w, chunk.w))
-	bsp.build(bounds, 3)
+	bsp.build(bounds)
 	var p = null
 	for leaf in bsp.leaves():
 		var root = room(leaf)
@@ -21,9 +21,8 @@ func generate(s = 0):
 
 func room(leaf):
 	var gap = Vector3(1, 1, 1)
-	var inset = Vector3(1, 1, 1)
-	var spot = leaf.bounds.position + inset
-	var s = leaf.bounds.size - (gap + inset)
+	var spot = leaf.bounds.position
+	var s = leaf.bounds.size - gap
 	if s.x < 2 or s.y < 2 or s.z < 2:
 		return null
 	if s.y > 3:
@@ -49,5 +48,5 @@ func join(a, b):
 	chunk.dig(AABB(current, tunnel_size), "BRICK")
 
 func spawn(what):
-	var at = chunk.world.pick_random()
-	what.position = Vector3(at.x, at.y + 1.5, at.z)
+	var at = chunk.blocks.pick_random()
+	what.position = Vector3(at.x, at.y + 2, at.z)

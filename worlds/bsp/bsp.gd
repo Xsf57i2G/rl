@@ -2,7 +2,8 @@ class_name BSP
 
 var root
 
-func build(b, d):
+func build(b):
+	var d = 3
 	root = Leaf.new(b)
 	split(root, d)
 

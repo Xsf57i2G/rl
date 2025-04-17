@@ -9,6 +9,6 @@ func dig(c, s = 0):
 			for z in c.w:
 				var p = Vector3(x, y, z)
 				var n = noise.get_noise_3dv(p)
-				if n > .1 and c.world.has(p):
+				if n > .1 and c.blocks.has(p):
 					var d = 1 + n * 2
 					c.hurt(p, d)

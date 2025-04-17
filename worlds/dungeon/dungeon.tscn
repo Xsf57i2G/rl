@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0wirliopp4s4"]
+[gd_scene load_steps=6 format=3 uid="uid://b0wirliopp4s4"]
 
 [ext_resource type="Script" uid="uid://mim1b7e5tj1r" path="res://worlds/dungeon/dungeon.gd" id="1_vxec4"]
 
@@ -21,10 +21,6 @@ fog_depth_curve = 0.5
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vxec4"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxec4"]
-shading_mode = 2
-vertex_color_use_as_albedo = true
-
 [node name="Dungeon" type="StaticBody3D"]
 script = ExtResource("1_vxec4")
 
@@ -35,7 +31,6 @@ environment = SubResource("Environment_unmbr")
 navigation_mesh = SubResource("NavigationMesh_vxec4")
 
 [node name="Skin" type="MeshInstance3D" parent="Navigation"]
-material_override = SubResource("StandardMaterial3D_vxec4")
 cast_shadow = 0
 
 [node name="Collision" type="CollisionShape3D" parent="."]
