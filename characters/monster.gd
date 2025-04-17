@@ -5,8 +5,9 @@ func _process(_dt):
 	wander()
 
 func move(d):
-	look_at(position + d)
-	super.move(d)
+	if d:
+		look_at(position + d)
+		super.move(d)
 
 func wander():
 	if $Navigation.is_navigation_finished():

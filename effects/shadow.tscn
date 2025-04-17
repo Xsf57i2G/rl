@@ -16,3 +16,4 @@ metadata/_snap_enabled = true
 
 [node name="Shadow" type="Decal"]
 texture_albedo = SubResource("GradientTexture2D_jov7j")
+cull_mask = 1048573

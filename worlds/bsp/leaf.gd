@@ -1,8 +1,8 @@
 class_name Leaf
 
 var bounds
-var left
-var right
+var l
+var r
 
 func _init(b):
 	bounds = b
@@ -18,9 +18,9 @@ func split():
 		return false
 	var cut_ratio = randf_range(0.4, 0.6)
 	var cut = bounds.size[axis] * cut_ratio
-	left = Leaf.new(AABB(bounds.position, bounds.size))
-	right = Leaf.new(AABB(bounds.position, bounds.size))
-	left.bounds.size[axis] = cut
-	right.bounds.position[axis] += cut
-	right.bounds.size[axis] -= cut
+	l = Leaf.new(AABB(bounds.position, bounds.size))
+	r = Leaf.new(AABB(bounds.position, bounds.size))
+	l.bounds.size[axis] = cut
+	r.bounds.position[axis] += cut
+	r.bounds.size[axis] -= cut
 	return true

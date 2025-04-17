@@ -1,13 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b856c0svhfmms"]
+[gd_scene load_steps=4 format=3 uid="uid://b856c0svhfmms"]
 
 [ext_resource type="Script" uid="uid://b66hlgwvwltju" path="res://characters/character.gd" id="1_qqr4u"]
 [ext_resource type="PackedScene" uid="uid://d2hxx2xnj0vih" path="res://effects/shadow.tscn" id="1_yf0e5"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_54qew"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_54qew"]
-radial_segments = 4
-rings = 0
+[ext_resource type="PackedScene" uid="uid://c7hmh7ehud5jq" path="res://models/Character.glb" id="3_3fwhk"]
 
 [node name="Character" type="CharacterBody3D"]
 slide_on_ceiling = false
@@ -15,20 +10,8 @@ floor_stop_on_slope = false
 floor_block_on_wall = false
 script = ExtResource("1_qqr4u")
 
-[node name="Collision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_54qew")
-
-[node name="Skin" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-layers = 2
-cast_shadow = 0
-mesh = SubResource("CapsuleMesh_54qew")
-
 [node name="Shadow" parent="." instance=ExtResource("1_yf0e5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-cull_mask = 1048573
 
-[node name="Skeleton" type="Skeleton3D" parent="."]
+[node name="Character" parent="." instance=ExtResource("3_3fwhk")]
 
-[node name="Hand" type="BoneAttachment3D" parent="Skeleton"]
+[editable path="Character"]

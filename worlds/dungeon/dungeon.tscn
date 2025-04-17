@@ -1,17 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://b0wirliopp4s4"]
+[gd_scene load_steps=7 format=3 uid="uid://b0wirliopp4s4"]
 
 [ext_resource type="Script" uid="uid://mim1b7e5tj1r" path="res://worlds/dungeon/dungeon.gd" id="1_vxec4"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vxec4"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_unbmw"]
+sky_material = SubResource("ProceduralSkyMaterial_vxec4")
+
 [sub_resource type="Environment" id="Environment_unmbr"]
+background_mode = 2
+sky = SubResource("Sky_unbmw")
 glow_enabled = true
 glow_normalized = true
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0, 0, 0, 1)
 fog_density = 1.0
 fog_depth_curve = 0.5
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_vxec4"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxec4"]
+shading_mode = 2
 vertex_color_use_as_albedo = true
 
 [node name="Dungeon" type="StaticBody3D"]
@@ -21,6 +32,7 @@ script = ExtResource("1_vxec4")
 environment = SubResource("Environment_unmbr")
 
 [node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_vxec4")
 
 [node name="Skin" type="MeshInstance3D" parent="Navigation"]
 material_override = SubResource("StandardMaterial3D_vxec4")

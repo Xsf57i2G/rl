@@ -6,11 +6,11 @@ func build(b, d):
 	root = Leaf.new(b)
 	split(root, d)
 
-func split(leaf, d):
-	if d <= 0 or not leaf.split():
+func split(l, d):
+	if d <= 0 or not l.split():
 		return
-	split(leaf.left, d - 1)
-	split(leaf.right, d - 1)
+	split(l.l, d - 1)
+	split(l.r, d - 1)
 
 func leaves():
 	var r = []
@@ -18,8 +18,8 @@ func leaves():
 	return r
 
 func collect(leaf, r):
-	if leaf.left and leaf.right:
-		collect(leaf.left, r)
-		collect(leaf.right, r)
+	if leaf.l and leaf.r:
+		collect(leaf.l, r)
+		collect(leaf.r, r)
 	else:
 		r.append(leaf)

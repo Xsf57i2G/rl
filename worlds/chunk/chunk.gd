@@ -1,79 +1,60 @@
 class_name Chunk
 
-enum Type {STONE, BRICK}
-
 var st = SurfaceTool.new()
-var w = 32
-var world = {}
-var stats = {
-	Type.STONE: {
-		life = 1,
-		color = Color.LIGHT_CORAL
-	},
-	Type.BRICK: {
-		life = 2,
-		color = Color.CORNFLOWER_BLUE
-	}
-}
+var w = 16
+var world = []
 
-func hurt(spot, force = 1):
-	if world.has(spot):
-		if spot.x == 0 or spot.x == w-1 or spot.y == 0 or spot.y == w-1 or spot.z == 0 or spot.z == w-1:
-			return
-		var block = world[spot]
-		block.life -= force
-		if block.life <= 0:
-			world.erase(spot)
+func _init():
+	for x in w:
+		for y in w:
+			for z in w:
+				world.append(Vector3(x,y,z))
 
-func dig(area, wall_type = null):
+func hurt(spot, n = 1):
+	if spot.x == 0 or spot.x == w-1 or spot.y == 0 or spot.y == w-1 or spot.z == 0 or spot.z == w-1:
+		return
+	var i = world.find(spot)
+	if i >= 0:
+		world.remove_at(i)
+
+func dig(area, t = null):
 	var a = area.position.floor()
 	var b = (area.position + area.size).ceil()
 	var area_int = AABB(a, b - a)
-	var blocks_to_wall = {}
-	var blocks_to_erase = []
+	var walls = []
+	var erases = []
 	for x in range(int(a.x), int(b.x)):
 		for y in range(int(a.y), int(b.y)):
 			for z in range(int(a.z), int(b.z)):
 				var spot = Vector3(x, y, z)
 				if world.has(spot):
-					blocks_to_erase.append(spot)
-					if wall_type != null:
+					erases.append(spot)
+					if t != null:
 						for way in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
-							var next_spot = spot + way
-							if inside(next_spot) and world.has(next_spot) and not area_int.has_point(next_spot):
-								if not area_int.has_point(next_spot):
-									blocks_to_wall[next_spot] = wall_type
-	for spot in blocks_to_erase:
-		world.erase(spot)
-	for spot in blocks_to_wall:
-		if not spot in blocks_to_erase:
-			place(spot, blocks_to_wall[spot])
+							var next = spot + way
+							if inside(next) and world.has(next) and not area_int.has_point(next):
+								walls.append(next)
+	for spot in erases:
+		var i = world.find(spot)
+		if i >= 0:
+			world.remove_at(i)
+	for spot in walls:
+		if not spot in erases and not world.has(spot):
+			world.append(spot)
 
-func place(spot, f = Type.STONE):
-	if inside(spot):
-		world[spot] = {
-			type = f,
-			life = stats[f].life
-		}
-
-func fill():
-	for x in w:
-		for y in w:
-			for z in w:
-				var spot = Vector3(x, y, z)
-				place(spot)
+func place(spot, block_type = "STONE"):
+	if inside(spot) and not world.has(spot):
+		world.append(spot)
 
 func inside(spot):
 	return (spot.x >= 0 and spot.y >= 0 and spot.z >= 0 and spot.x < w and spot.y < w and spot.z < w)
 
 func side(spot, way):
 	st.set_normal(way)
-	var block = world[spot]
-	var c = stats[block.type].color
-	st.set_color(c)
+	st.set_color(Color.WHITE)
 	var points = map(way)
-	for i in [0, 1, 2, 0, 2, 3]:
-		st.add_vertex(Vector3(spot.x, spot.y, spot.z) + points[i])
+	for v in [0, 1, 2, 0, 2, 3]:
+		st.add_vertex(spot + points[v])
 
 func map(way):
 	match way:
@@ -90,36 +71,51 @@ func map(way):
 		Vector3.BACK:
 			return [Vector3(0, 0, 1), Vector3(0, 1, 1), Vector3(1, 1, 1), Vector3(1, 0, 1)]
 
-func cube(spot):
-	for way in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
-		var next = spot + way
-		if not inside(next) or not world.has(next):
-			side(spot, way)
+func cube(s):
+	for d in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
+		var n = s + d
+		if not world.has(n):
+			side(s, d)
 
 func form():
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for block in world.keys():
-		cube(block)
+	for spot in world:
+		cube(spot)
 	st.index()
 	return st.commit()
 
 func navmesh():
-	var st2 = SurfaceTool.new()
-	st2.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for block in world.keys():
-		var next = block + Vector3.UP
-		if not inside(next) or not world.has(next):
-			st2.set_normal(Vector3.UP)
-			var points = map(Vector3.UP)
-			for i in [0, 1, 2, 0, 2, 3]:
-				st2.add_vertex(Vector3(block.x, block.y, block.z) + points[i])
-	st2.index()
-	var mesh = st2.commit()
 	var n = NavigationMesh.new()
-	n.create_from_mesh(mesh)
+	var m = st.commit()
+	if m == null or m.get_surface_count() == 0:
+		return n
+	var a = m.surface_get_arrays(0)
+	var vtx = a[Mesh.ARRAY_VERTEX]
+	var idx = a[Mesh.ARRAY_INDEX]
+	if vtx == null or idx == null:
+		return n
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for i in idx.size() / 3:
+		var i0 = idx[i * 3]
+		var i1 = idx[i * 3 + 1]
+		var i2 = idx[i * 3 + 2]
+		var v0 = vtx[i0]
+		var v1 = vtx[i1]
+		var v2 = vtx[i2]
+		var norm = (v1 - v0).cross(v2 - v0)
+		if norm.dot(Vector3.DOWN) > 0.1:
+			st.set_normal(Vector3.UP)
+			st.add_vertex(v0)
+			st.add_vertex(v2)
+			st.add_vertex(v1)
+	st.index()
+	var nm = st.commit()
+	if nm != null and nm.get_surface_count() > 0:
+		n.create_from_mesh(nm)
 	return n
 
-func collider(m):
+func collider():
 	var c = ConcavePolygonShape3D.new()
+	var m = st.commit()
 	c.set_faces(m.get_faces())
 	return c

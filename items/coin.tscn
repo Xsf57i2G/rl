@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://2y77y1yk7vd2"]
+
+[ext_resource type="PackedScene" uid="uid://eljnryyyrem5" path="res://items/item.tscn" id="1_6dw85"]
+[ext_resource type="PackedScene" uid="uid://bd8in4ctjcypc" path="res://models/Coin.glb" id="2_qr5ih"]
+
+[node name="Coin" instance=ExtResource("1_6dw85")]
+
+[node name="Coin" parent="." index="0" instance=ExtResource("2_qr5ih")]

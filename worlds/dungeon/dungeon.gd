@@ -3,68 +3,51 @@ class_name Dungeon extends Node3D
 var bsp = BSP.new()
 var chunk = Chunk.new()
 var ruin = Ruin.new()
-var rooms = []
 
 func generate(s = 0):
-	randomize()
-	chunk.fill()
 	var bounds = AABB(Vector3.ZERO, Vector3(chunk.w, chunk.w, chunk.w))
-	bsp.build(bounds, 5)
-	var room_centers = []
-	rooms.clear()
+	bsp.build(bounds, 3)
+	var p = null
 	for leaf in bsp.leaves():
-		var r = room(leaf)
-		if r:
-			room_centers.append(r.position + (r.size / 2).floor())
-			rooms.append(r)
-	if room_centers.size() > 1:
-		for i in range(room_centers.size() - 1):
-			tunnel(room_centers[i], room_centers[i+1])
+		var root = room(leaf)
+		if root:
+			if p != null:
+				join(p, root)
+			p = root
 	ruin.dig(chunk, s)
-	var navigation = $Navigation
-	var skin = $Navigation/Skin
-	var collision = $Collision
-	skin.mesh = chunk.form()
-	navigation.navigation_mesh = chunk.navmesh()
-	collision.shape = chunk.collider(skin.mesh)
+	$Navigation/Skin.mesh = chunk.form()
+	$Navigation.navigation_mesh = chunk.navmesh()
+	$Collision.shape = chunk.collider()
 
 func room(leaf):
 	var gap = Vector3(1, 1, 1)
 	var inset = Vector3(1, 1, 1)
-	var pos = leaf.bounds.position + inset
-	var size = leaf.bounds.size - (gap + inset)
-	if size.x < 2 or size.y < 2 or size.z < 2:
+	var spot = leaf.bounds.position + inset
+	var s = leaf.bounds.size - (gap + inset)
+	if s.x < 2 or s.y < 2 or s.z < 2:
 		return null
-	if size.y > 3:
-		size.y = 3
-	var box = AABB(pos, size)
-	chunk.dig(box, Chunk.Type.BRICK)
+	if s.y > 3:
+		s.y = 3
+	var box = AABB(spot, s)
+	chunk.dig(box, "BRICK")
 	return box
 
-func tunnel(a, b):
-	var p = a.floor()
-	var e = b.floor()
-	var s = Vector3(3, 3, 3)
-	var o_horizontal = Vector3(1, 1, 1)
-	var o_vertical = Vector3(1, 0, 1)
-	var current_offset = o_horizontal
-	while p.x != e.x:
-		current_offset = o_horizontal
-		chunk.dig(AABB(p - current_offset, s), Chunk.Type.BRICK)
-		p.x += 1 if e.x > p.x else -1
-	while p.z != e.z:
-		current_offset = o_horizontal
-		chunk.dig(AABB(p - current_offset, s), Chunk.Type.BRICK)
-		p.z += 1 if e.z > p.z else -1
-	while p.y != e.y:
-		current_offset = o_vertical
-		chunk.dig(AABB(p - current_offset, s), Chunk.Type.BRICK)
-		p.y += 1 if e.y > p.y else -1
-	chunk.dig(AABB(p - current_offset, s), Chunk.Type.BRICK)
+func join(a, b):
+	var tunnel_size = Vector3(3, 3, 3)
+	var from = Vector3(a.position.x + a.size.x, a.position.y + a.size.y, a.position.z + a.size.z).floor()
+	var end_pos = Vector3(b.position.x + b.size.x, b.position.y + b.size.y, b.position.z + b.size.z).floor()
+	var current = from
+	while current.x != end_pos.x:
+		chunk.dig(AABB(current, tunnel_size), "BRICK")
+		current.x += 1 if end_pos.x > current.x else -1
+	while current.z != end_pos.z:
+		chunk.dig(AABB(current, tunnel_size), "BRICK")
+		current.z += 1 if end_pos.z > current.z else -1
+	while current.y != end_pos.y:
+		chunk.dig(AABB(current, tunnel_size), "BRICK")
+		current.y += 1 if end_pos.y > current.y else -1
+	chunk.dig(AABB(current, tunnel_size), "BRICK")
 
 func spawn(what):
-	var r = rooms[0]
-	var i = what.instantiate()
-	add_child(i)
-	i.position = Vector3(floor(randf_range(r.position.x, r.position.x + r.size.x)) + 0.5, r.position.y, floor(randf_range(r.position.z, r.position.z + r.size.z)) + 0.5)
-	return i
+	var at = chunk.world.pick_random()
+	what.position = Vector3(at.x, at.y + 1.5, at.z)

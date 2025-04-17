@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://bnom0wi82nuqa"]
+
+[ext_resource type="PackedScene" uid="uid://b856c0svhfmms" path="res://characters/character.tscn" id="1_ckrog"]
+[ext_resource type="Script" uid="uid://b5eguyl4fg1ny" path="res://characters/prisoner.gd" id="2_gmmbh"]
+
+[node name="Prisoner" instance=ExtResource("1_ckrog")]
+collision_layer = 2
+script = ExtResource("2_gmmbh")
+
+[node name="Camera" type="Camera3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+fov = 90.0
+
+[node name="Remote" type="RemoteTransform3D" parent="Camera" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+remote_path = NodePath("../../Skeleton/Hand")
+
+[node name="Ray" type="RayCast3D" parent="Camera" index="1"]
+target_position = Vector3(0, 0, -1)
+
+[editable path="Character"]

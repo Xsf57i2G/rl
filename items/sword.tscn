@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://0xfupra7pyn6"]
+
+[ext_resource type="PackedScene" uid="uid://eljnryyyrem5" path="res://items/item.tscn" id="1_y35re"]
+[ext_resource type="PackedScene" uid="uid://b7v4ytaifoo1g" path="res://models/Sword.glb" id="2_r0thv"]
+
+[node name="Sword" instance=ExtResource("1_y35re")]
+
+[node name="Sword" parent="." index="0" instance=ExtResource("2_r0thv")]
