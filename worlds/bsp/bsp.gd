@@ -1,5 +1,6 @@
-class_name BSP
+class_name BSP extends Resource
 
+@export var depth = 4
 var root
 
 func build(b, d):

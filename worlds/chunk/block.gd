@@ -1,16 +1,22 @@
 class_name Block
 
-var id
-var life = 1
-var color
+const STONE = 0
+const BRICK = 1
+const OBSIDIAN = 2
 
-static var TYPE = {
-	"STONE": Block.new("STONE", 1, Color.SLATE_GRAY),
-	"BRICK": Block.new("BRICK", 3, Color.DIM_GRAY),
-	"OBSIDIAN": Block.new("OBSIDIAN", INF, Color.DARK_SLATE_BLUE)
-}
+var t
+var l
+var hp
 
-func _init(p_id, p_life, p_color):
-	id = p_id
-	life = p_life
-	color = p_color
+func _init(type):
+	t = type
+	match t:
+		STONE: hp = 1
+		BRICK: hp = 3
+		OBSIDIAN: hp = INF
+		_: hp = 1
+	l = hp
+
+func hurt():
+	l -= 1
+	return l <= 0

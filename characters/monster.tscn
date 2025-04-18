@@ -1,26 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhsrmm4akehyf"]
+[gd_scene load_steps=4 format=3 uid="uid://bhsrmm4akehyf"]
 
 [ext_resource type="PackedScene" uid="uid://b856c0svhfmms" path="res://characters/character.tscn" id="1_t47h7"]
 [ext_resource type="Script" uid="uid://0ycgyvpd466h" path="res://characters/monster.gd" id="2_bjm3i"]
-[ext_resource type="PackedScene" uid="uid://lwyok3ufb8p2" path="res://items/torch.tscn" id="3_jlo68"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_bjm3i"]
 
 [node name="Monster" instance=ExtResource("1_t47h7")]
 script = ExtResource("2_bjm3i")
 
-[node name="Navigation" type="NavigationAgent3D" parent="." index="3"]
+[node name="Navigation" type="NavigationAgent3D" parent="." index="2"]
 path_postprocessing = 2
 path_metadata_flags = 0
 simplify_path = true
 debug_enabled = true
 
-[node name="Head" type="ShapeCast3D" parent="." index="4"]
+[node name="Head" type="ShapeCast3D" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("SphereShape3D_bjm3i")
 target_position = Vector3(0, 0, 0)
 
-[node name="Hand" parent="Skeleton" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1)
-
-[node name="Torch" parent="Skeleton/Hand" index="0" instance=ExtResource("3_jlo68")]
+[editable path="Character"]

@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://cxrrk0hlp01db"]
+[gd_scene load_steps=5 format=3 uid="uid://cxrrk0hlp01db"]
 
 [ext_resource type="Script" uid="uid://dhkf8hxfuv47y" path="res://game.gd" id="1_80nbo"]
 [ext_resource type="PackedScene" uid="uid://b0wirliopp4s4" path="res://worlds/dungeon/dungeon.tscn" id="2_e2o6t"]
+[ext_resource type="PackedScene" uid="uid://bhsrmm4akehyf" path="res://characters/monster.tscn" id="3_feb5d"]
+[ext_resource type="PackedScene" uid="uid://bnom0wi82nuqa" path="res://characters/prisoner.tscn" id="4_fc0e3"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_80nbo")
 
 [node name="Dungeon" parent="." instance=ExtResource("2_e2o6t")]
+
+[node name="Monster" parent="." instance=ExtResource("3_feb5d")]
+
+[node name="Prisoner" parent="." instance=ExtResource("4_fc0e3")]

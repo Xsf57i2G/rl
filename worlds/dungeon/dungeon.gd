@@ -1,28 +1,38 @@
 class_name Dungeon extends Node3D
 
-@export var depth = 4
-@export var pad = 1
-@export var chance = 1
+@export var p = 1
+@export var c = 1
 @export var h = 5
-
-var bsp = BSP.new()
-var chunk = Chunk.new()
+@export var layers = 1
+@export var k = Chunk.new()
+@export var bsp = BSP.new()
+@export var r = Ruin.new()
 
 func generate():
-	bsp.build(AABB(Vector3.ZERO, Vector3(chunk.w, chunk.w, chunk.w)), depth)
+	bsp.build(AABB(Vector3.ZERO, Vector3(k.w, k.w, k.w)), bsp.depth)
 	for l in bsp.leaves():
-		if randf() < chance:
+		if l.bounds.position.y < layers and randf() < c:
 			room(l)
-	$Navigation.navigation_mesh = chunk.navmesh()
-	$Navigation/Skin.mesh = chunk.form()
-	$Collision.shape = chunk.collider()
+	r.dig(k)
+	$Navigation/Skin.mesh = k.form()
+	$Collision.shape = k.collider()
+	$Navigation.navigation_mesh = k.navmesh()
 
-func room(leaf):
-	var b = leaf.bounds
-	var p = b.position + Vector3.ONE * pad
-	var s = (b.size - Vector3.ONE * pad * 2).max(Vector3.ZERO)
-	s.y = min(s.y, h)
-	chunk.dig(AABB(p, s))
+func room(l):
+	var bnd = l.bounds
+	var p1 = bnd.position + Vector3.ONE * p
+	var sz = (bnd.size - Vector3.ONE * p * 2).max(Vector3.ZERO)
+	sz.y = min(sz.y, h)
+	var a = AABB(p1, sz)
+	k.dig(a)
+	var a1 = a.position.floor()
+	var b1 = (a.position + a.size).ceil()
+	for x in range(int(a1.x), int(b1.x)):
+		for y in range(int(a1.y), int(b1.y)):
+			for z in range(int(a1.z), int(b1.z)):
+				k.place(Vector3(x, y, z), Block.BRICK)
 
-func spawn(what):
-	what.position = chunk.blocks.pick_random()
+func spawn(w):
+	var keys = k.b.keys()
+	if keys.size() > 0:
+		w.position = keys.pick_random()

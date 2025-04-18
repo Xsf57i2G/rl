@@ -6,7 +6,6 @@ func _process(_dt):
 
 func move(d):
 	if d:
-		look_at(position + d)
 		super.move(d)
 
 func wander():

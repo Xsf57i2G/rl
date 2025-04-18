@@ -1,44 +1,47 @@
-class_name Chunk
+class_name Chunk extends Resource
 
-var st = SurfaceTool.new()
-var w = 16
-var blocks = []
+var s = SurfaceTool.new()
+@export var w = 16
+var b = {}
 
 func _init():
 	for x in w:
 		for y in w:
 			for z in w:
-				blocks.append(Vector3(x,y,z))
+				var at = Vector3(x,y,z)
+				b[at] = Block.new(Block.STONE)
 
-func hurt(spot, n = 1):
-	if spot.x == 0 or spot.x == w-1 or spot.y == 0 or spot.y == w-1 or spot.z == 0 or spot.z == w-1:
+func hurt(at):
+	if not b.has(at):
 		return
-	blocks.erase(spot)
+	var blk = b[at]
+	if blk.hurt():
+		b.erase(at)
 
-func dig(area, t = null):
-	var a = area.position.floor()
-	var b = (area.position + area.size).ceil()
-	for x in range(int(a.x), int(b.x)):
-		for y in range(int(a.y), int(b.y)):
-			for z in range(int(a.z), int(b.z)):
-				blocks.erase(Vector3(x,y,z))
+func dig(a):
+	var p1 = a.position.floor()
+	var p2 = (a.position + a.size).ceil()
+	for x in range(int(p1.x), int(p2.x)):
+		for y in range(int(p1.y), int(p2.y)):
+			for z in range(int(p1.z), int(p2.z)):
+				b.erase(Vector3(x,y,z))
 
-func place(spot, block_type = "STONE"):
-	if inside(spot) and not blocks.has(spot):
-		blocks.append(spot)
+func place(at, t = Block.STONE):
+	if inside(at):
+		b[at] = Block.new(t)
 
-func inside(spot):
-	return (spot.x >= 0 and spot.y >= 0 and spot.z >= 0 and spot.x < w and spot.y < w and spot.z < w)
+func inside(at):
+	return (at.x >= 0 and at.y >= 0 and at.z >= 0 and at.x < w and at.y < w and at.z < w)
 
-func side(spot, way):
-	st.set_normal(way)
-	st.set_color(Color.WHITE)
-	var points = map(way)
-	for v in [0, 1, 2, 0, 2, 3]:
-		st.add_vertex(spot + points[v])
+func side(at, d):
+	s.set_normal(d)
+	s.set_color(Color.WHITE)
+	var pts = map(d)
+	for v in [0, 2, 1, 0, 3, 2]:
+		s.add_vertex(at + pts[v])
 
-func map(way):
-	match way:
+func map(d):
+	match d:
 		Vector3.UP:
 			return [Vector3(0, 1, 0), Vector3(1, 1, 0), Vector3(1, 1, 1), Vector3(0, 1, 1)]
 		Vector3.DOWN:
@@ -52,22 +55,22 @@ func map(way):
 		Vector3.BACK:
 			return [Vector3(0, 0, 1), Vector3(0, 1, 1), Vector3(1, 1, 1), Vector3(1, 0, 1)]
 
-func cube(s):
+func cube(at):
 	for d in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
-		var n = s + d
-		if not blocks.has(n):
-			side(s, d)
+		var n = at + d
+		if not b.has(n):
+			side(at, d)
 
 func form():
-	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for spot in blocks:
-		cube(spot)
-	st.index()
-	return st.commit()
+	s.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for at in b:
+		cube(at)
+	s.index()
+	return s.commit()
 
 func navmesh():
 	var n = NavigationMesh.new()
-	var m = st.commit()
+	var m = s.commit()
 	if m == null or m.get_surface_count() == 0:
 		return n
 	var a = m.surface_get_arrays(0)
@@ -75,7 +78,7 @@ func navmesh():
 	var idx = a[Mesh.ARRAY_INDEX]
 	if vtx == null or idx == null:
 		return n
-	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	s.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in idx.size() / 3:
 		var i0 = idx[i * 3]
 		var i1 = idx[i * 3 + 1]
@@ -85,18 +88,18 @@ func navmesh():
 		var v2 = vtx[i2]
 		var norm = (v1 - v0).cross(v2 - v0)
 		if norm.dot(Vector3.DOWN) > 0.1:
-			st.set_normal(Vector3.UP)
-			st.add_vertex(v0)
-			st.add_vertex(v2)
-			st.add_vertex(v1)
-	st.index()
-	var nm = st.commit()
+			s.set_normal(Vector3.UP)
+			s.add_vertex(v0)
+			s.add_vertex(v2)
+			s.add_vertex(v1)
+	s.index()
+	var nm = s.commit()
 	if nm != null and nm.get_surface_count() > 0:
-		n.create_from_mesh(nm)
+		n.create_from_mesh(s.commit())
 	return n
 
 func collider():
 	var c = ConcavePolygonShape3D.new()
-	var m = st.commit()
+	var m = s.commit()
 	c.set_faces(m.get_faces())
 	return c

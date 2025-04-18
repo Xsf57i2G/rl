@@ -27,7 +27,6 @@ func fall():
 	var dt = get_process_delta_time()
 	velocity.y += g.y * dt
 
-
 func lean(d):
 	var a = 0.2
 	var s = 10.0
