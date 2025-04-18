@@ -18,27 +18,10 @@ func hurt(spot, n = 1):
 func dig(area, t = null):
 	var a = area.position.floor()
 	var b = (area.position + area.size).ceil()
-	var area_int = AABB(a, b - a)
-	var walls = []
-	var erases = []
 	for x in range(int(a.x), int(b.x)):
 		for y in range(int(a.y), int(b.y)):
 			for z in range(int(a.z), int(b.z)):
-				var spot = Vector3(x, y, z)
-				if blocks.has(spot):
-					erases.append(spot)
-					if t != null:
-						for way in [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
-							var next = spot + way
-							if inside(next) and blocks.has(next) and not area_int.has_point(next):
-								walls.append(next)
-	for spot in erases:
-		var i = blocks.find(spot)
-		if i >= 0:
-			blocks.remove_at(i)
-	for spot in walls:
-		if not spot in erases and not blocks.has(spot):
-			blocks.append(spot)
+				blocks.erase(Vector3(x,y,z))
 
 func place(spot, block_type = "STONE"):
 	if inside(spot) and not blocks.has(spot):

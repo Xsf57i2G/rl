@@ -20,6 +20,7 @@ fog_density = 1.0
 fog_depth_curve = 0.5
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_vxec4"]
+agent_height = 2.0
 
 [node name="Dungeon" type="StaticBody3D"]
 script = ExtResource("1_vxec4")

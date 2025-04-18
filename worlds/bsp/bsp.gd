@@ -2,25 +2,23 @@ class_name BSP
 
 var root
 
-func build(b):
-	var d = 3
+func build(b, d):
 	root = Leaf.new(b)
 	split(root, d)
 
 func split(l, d):
-	if d <= 0 or not l.split():
-		return
-	split(l.l, d - 1)
-	split(l.r, d - 1)
+	if d > 0 and l.split():
+		split(l.l, d - 1)
+		split(l.r, d - 1)
 
 func leaves():
 	var r = []
-	collect(root, r)
+	var q = [root]
+	while q:
+		var n = q.pop_front()
+		if n.l:
+			q.push_back(n.l)
+			q.push_back(n.r)
+		else:
+			r.append(n)
 	return r
-
-func collect(leaf, r):
-	if leaf.l and leaf.r:
-		collect(leaf.l, r)
-		collect(leaf.r, r)
-	else:
-		r.append(leaf)

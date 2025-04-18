@@ -36,6 +36,7 @@ _subresources={
 "nodes": {
 "PATH:Door": {
 "generate/physics": true,
+"mesh_instance/cast_shadow": 0,
 "physics/shape_type": 2
 }
 }
