@@ -14,7 +14,6 @@ func _init(type):
 		STONE: hp = 1
 		BRICK: hp = 3
 		OBSIDIAN: hp = INF
-		_: hp = 1
 	l = hp
 
 func hurt():

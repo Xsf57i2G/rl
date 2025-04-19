@@ -13,8 +13,8 @@ dest_files=["res://.godot/imported/Character.glb-990d1beb1c4adc53f67d3c878b6b5eb
 
 [params]
 
-nodes/root_type=""
-nodes/root_name=""
+nodes/root_type="Node3D"
+nodes/root_name="Skin"
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
 nodes/import_as_skeleton_bones=false
@@ -35,7 +35,6 @@ import_script/path=""
 _subresources={
 "nodes": {
 "PATH:Armature/Skeleton3D/Sphere": {
-"generate/physics": true,
 "mesh_instance/cast_shadow": 0,
 "mesh_instance/layers": 2,
 "physics/layer": 3,

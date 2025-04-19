@@ -1,3 +1,5 @@
+@tool
+
 class_name Chunk extends Resource
 
 var s = SurfaceTool.new()
