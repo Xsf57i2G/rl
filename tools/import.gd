@@ -31,4 +31,3 @@ func find(n):
 	for c in n.get_children():
 		r.append_array(find(c))
 	return r
-

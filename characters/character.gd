@@ -1,9 +1,6 @@
-@tool
-
 class_name Character extends CharacterBody3D
 
 var seed = ""
-@export_tool_button("Generate", "RandomNumberGenerator") var button = generate
 @export var dead = false
 @export var hp = 1
 @export var jumps = 2

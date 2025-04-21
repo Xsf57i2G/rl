@@ -1,9 +1,5 @@
-@tool
-
-class_name Chunk extends Resource
-
 var s = SurfaceTool.new()
-@export_range(8, 128, 4) var w
+var w = 16
 var b = {}
 
 func _init():
@@ -70,7 +66,7 @@ func form():
 	s.index()
 	return s.commit()
 
-func navmesh():
+func nav():
 	var n = NavigationMesh.new()
 	var m = s.commit()
 	if m == null or m.get_surface_count() == 0:
