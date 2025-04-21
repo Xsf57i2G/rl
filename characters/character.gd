@@ -1,10 +1,22 @@
+@tool
+
 class_name Character extends CharacterBody3D
 
-var dead = false
-var hp = 1
-var jumps = 2
-var speed = 5
-var acceleration = 25
+var seed = ""
+@export_tool_button("Generate", "RandomNumberGenerator") var button = generate
+@export var dead = false
+@export var hp = 1
+@export var jumps = 2
+@export var speed = 5
+@export var acceleration = 25
+@export var inventory = Inventory.new()
+var rng = RandomNumberGenerator.new()
+
+func generate():
+	seed = str(randi())
+	rng.seed = seed.hash()
+	$Skeleton/Skin.get_active_material(0).albedo_color = Color(rng.randf(), rng.randf(), rng.randf())
+	hp = rng.randi_range(1, 100)
 
 func hurt(n):
 	if dead:

@@ -3,6 +3,7 @@ class_name Block
 const STONE = 0
 const BRICK = 1
 const OBSIDIAN = 2
+const WATER = 3
 
 var t
 var l
@@ -11,9 +12,14 @@ var hp
 func _init(type):
 	t = type
 	match t:
-		STONE: hp = 1
-		BRICK: hp = 3
-		OBSIDIAN: hp = INF
+		STONE:
+			hp = 1
+		BRICK:
+			hp = 3
+		OBSIDIAN:
+			hp = INF
+		WATER:
+			hp = INF
 	l = hp
 
 func hurt():

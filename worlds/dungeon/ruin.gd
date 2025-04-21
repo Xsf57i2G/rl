@@ -1,13 +1,11 @@
 @tool
 class_name Ruin extends Resource
 
-@export var seed = 0
 @export var noise = FastNoiseLite.new()
+@export var seed_value = randi()
 
 func dig(c):
-	noise.seed = seed
-	var k = c.b.keys()
-	for at in k:
+	for at in c.b.keys():
 		if not c.b.has(at) or c.b[at].hp == INF:
 			continue
 		var e = 0

@@ -3,7 +3,7 @@
 class_name Chunk extends Resource
 
 var s = SurfaceTool.new()
-@export var w = 16
+@export_range(8, 128, 4) var w
 var b = {}
 
 func _init():
